@@ -1,0 +1,35 @@
+body
+{
+    background-image: url(derpy.jpg);
+    background-size: cover;
+}
+#groupsdiv
+{
+    overflow:auto;
+    border:solid;
+    position:absolute;
+    top:0;
+    left:0;
+    width:14%;
+    height:99%;
+}
+#subjectsdiv
+{
+    overflow:auto;
+    border:solid;
+    position:absolute;
+    top:0;
+    left:15%;
+    width:84%;
+    height:29%;
+}
+#message
+{
+    overflow:auto;
+    border:solid;
+    position:absolute;
+    top:30%;
+    left:15%;
+    width:84%;
+    height:69%;
+}

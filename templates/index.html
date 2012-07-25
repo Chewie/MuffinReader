@@ -1,0 +1,28 @@
+<html>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+
+    <script
+        src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js">
+    </script>
+
+    <script src="{{ url_for('static', filename='index.js') }}">
+    </script>
+
+    <body>
+        <div id="groupsdiv">
+            <ul id = "groupslist">
+                {% for group in groups %}
+                <li><a href>{{ group }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div id="subjectsdiv">
+            <ul id = "subjectslist">
+            </ul>
+        </div>
+
+        <div id="message">
+        </div>
+    </body>
+</html>
