@@ -33,3 +33,33 @@ body
     width:84%;
     height:69%;
 }
+
+ul
+{
+    list-style-type: none;
+    padding-left: 0pt;
+    padding-top: 0pt;
+    margin-top: 0pt;
+    margin-bot: 0pt;
+}
+
+li
+{
+    border: 1px solid;
+    background-color: rgba(50, 50, 50, 0.5);
+    display: block;
+    opacity: 0.5;
+}
+
+li :hover
+{
+    background-color: rgba(0, 0, 255, 0.5);
+}
+
+li a
+{
+    color: black;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
