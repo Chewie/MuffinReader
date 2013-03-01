@@ -4,7 +4,6 @@ import nntplib
 import flask
 
 app = flask.Flask(__name__)
-app.secret_key = "zorglub"
 
 
 def get_encoding(s, num):
@@ -27,6 +26,7 @@ def get_group(group):
     subjects = s.xhdr("subject", first + "-" + last)[1]
     subjects = [(num, properly_decode_header(title)) for
             (num, title) in subjects]
+    subjects.reverse()
     return flask.render_template('subjects.html', subjects=subjects)
 
 
