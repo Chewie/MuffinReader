@@ -1,3 +1,9 @@
 {% for line in message %}
-    {{ line }}<br/>
+    {% if line.starts %}
+        <span class="{{ line.starts }}">
+    {% endif %}
+    {{ line.text }}<br/>
+    {% if line.ends %}
+        </span>
+    {% endif %}
 {% endfor %}

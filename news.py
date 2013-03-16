@@ -32,6 +32,20 @@ def mask_email(line):
         line = line[:user_start] + u'.' * user_length + line[user_end:]
     return line
 
+class Line(object):
+    # These tags maps CSS span classes.
+    QUOTE = 'quote'
+    QUOTE_QUOTE = 'quote_quote'
+    SIGNATURE = 'signature'
+
+    QUOTE_PREFIXES = (u'>', u'|')
+    QUOTE_QUOTE_PREFIXES = (u'>>', u'||', u'>|', u'|>')
+
+    def __init__(self, text, starts=None, ends=None):
+        self.text = text
+        self.starts = starts
+        self.ends = ends
+
 def get_encoding(s, num):
     return [entry[1].split(";")[1][9:] for entry in
             s.xhdr('Content-Type', num)[1]]
@@ -72,6 +86,34 @@ def get_message(group, num):
         mask_email(line.decode(encoding, 'replace'))
         for line in s.body(num)[3]
     ]
+
+    # Tag lines to recognize quotes and signatures.
+    message = []
+    state = None
+    for line in lines:
+        # By default, do not change the state
+        new_state = state
+        if state == Line.SIGNATURE:
+            # After a signature mark, everything belongs to the signature
+            pass
+        elif state in (None, Line.QUOTE, Line.QUOTE_QUOTE):
+            if line[0:2] in Line.QUOTE_QUOTE_PREFIXES:
+                new_state = Line.QUOTE_QUOTE
+            elif line[0:1] in Line.QUOTE_PREFIXES:
+                new_state = Line.QUOTE
+            elif line == u'-- ':
+                new_state = Line.SIGNATURE
+            else:
+                new_state = None
+        else:
+            assert False, 'Wrong state: %s' % state
+        starts = None
+        if new_state != state:
+            if state is not None:
+                message[-1].ends = state
+            starts = new_state
+        message.append(Line(line, starts))
+        state = new_state
 
     return flask.render_template('message.html', message=message)
 

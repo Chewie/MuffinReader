@@ -37,6 +37,22 @@ body
     width:84%;
     height:69%;
     color: #a0a0a0;
+    font-family: monospace;
+}
+
+#message .quote
+{
+    color: rgba(192, 64, 64, 0.75);
+}
+
+#message .quote_quote
+{
+    color: rgba(192, 128, 64, 0.75);
+}
+
+#message .signature
+{
+    color: rgba(64, 200, 0, 0.75);
 }
 
 ul
