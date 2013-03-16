@@ -1,3 +1,16 @@
+{% for header in headers %}
+    <span class="header_name">{{ header.name }}:</span>
+    <span class="header_content">{{ header.content }}</span><br/>
+{% endfor %}
+
+<br/>
+
 {% for line in message %}
-    {{ line }}<br/>
+    {% if line.starts %}
+        <span class="{{ line.starts }}">
+    {% endif %}
+    {{ line.text }}<br/>
+    {% if line.ends %}
+        </span>
+    {% endif %}
 {% endfor %}
