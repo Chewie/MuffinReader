@@ -12,7 +12,7 @@
         <div id="groupsdiv">
             <ul id = "groupslist">
                 {% for group  in groups %}
-                <li><a href="#{{ group.name }}">{{ group.name }} ({{ group.count }})</a></li>
+                <li><a href="#{{ group.name }}"><span class="name">{{ group.name }}</span> <span class="count">({{ group.count }})</span></a></li>
                 {% endfor %}
             </ul>
         </div>
