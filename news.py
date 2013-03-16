@@ -14,7 +14,7 @@ def get_encoding(s, num):
 @app.route('/')
 def index():
     s = nntplib.NNTP("news.epita.fr")
-    groups = [entry[0] for entry in s.list()[1]]
+    groups = sorted(entry[0] for entry in s.list()[1])
     s.quit()
     return flask.render_template('index.html', groups=groups)
 
