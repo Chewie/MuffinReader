@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 from lamson.encoding import properly_decode_header
+import collections
 import nntplib
 import flask
+
+Group = collections.namedtuple('Group', 'name count')
+def nntp_to_group(entry):
+    return Group(
+        name=entry[0],
+        count=max(0, int(entry[1]) - int(entry[2]))
+    )
 
 app = flask.Flask(__name__)
 
@@ -14,7 +22,7 @@ def get_encoding(s, num):
 @app.route('/')
 def index():
     s = nntplib.NNTP("news.epita.fr")
-    groups = sorted(entry[0] for entry in s.list()[1])
+    groups = sorted(nntp_to_group(entry) for entry in s.list()[1])
     s.quit()
     return flask.render_template('index.html', groups=groups)
 
