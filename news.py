@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+
 from lamson.encoding import properly_decode_header
-import collections
-import nntplib
 import flask
+
+import collections
+import email.header
+import nntplib
 import re
 
 
@@ -22,6 +25,16 @@ def nntp_to_group(entry):
     return Group(
         name=entry[0],
         count=max(0, int(entry[1]) - int(entry[2]))
+    )
+
+Header = collections.namedtuple('Header', 'name content')
+def nntp_to_header_name(line):
+    return line.lower().split(': ', 1)[0]
+def nntp_to_header_content(line):
+    return ''.join(
+        part.decode(encoding or 'ascii', 'replace')
+        for part, encoding
+        in email.header.decode_header(line.split(': ', 1)[1])
     )
 
 def mask_email(line):
@@ -75,6 +88,17 @@ def get_message(group, num):
     s = nntplib.NNTP('news.epita.fr')
     s.group(group)
 
+    # Decode headers, and mask emails in it.
+    headers_set = ('subject', 'from', 'date')
+    headers = [
+        Header(
+            name=nntp_to_header_name(line).capitalize(),
+            content=mask_email(nntp_to_header_content(line))
+        )
+        for line in s.head(num)[3]
+        if nntp_to_header_name(line) in headers_set
+    ]
+
     # Decode lines from their original charset to Unicode.
     encoding = get_encoding(s, num)
     if len(encoding) != 1:
@@ -115,7 +139,10 @@ def get_message(group, num):
         message.append(Line(line, starts))
         state = new_state
 
-    return flask.render_template('message.html', message=message)
+    return flask.render_template(
+        'message.html',
+        headers=headers, message=message
+    )
 
 
 if __name__ == '__main__':

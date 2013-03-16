@@ -40,6 +40,12 @@ body
     font-family: monospace;
 }
 
+#message .header_name
+{
+    color: rgba(64, 200, 0, 0.75);
+    font-weight: bold;
+}
+
 #message .quote
 {
     color: rgba(192, 64, 64, 0.75);
