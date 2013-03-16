@@ -3,6 +3,19 @@ from lamson.encoding import properly_decode_header
 import collections
 import nntplib
 import flask
+import re
+
+
+app = flask.Flask(__name__)
+
+
+EMAIL_RE = re.compile(
+    u'(?P<prefix>\s|<)'
+    u'(?P<user>[a-zA-Z.-_]+)'
+    u'(?P<domain>@[a-zA-Z.-_]+)'
+    u'(?P<suffix>\s|>)'
+)
+
 
 Group = collections.namedtuple('Group', 'name count')
 def nntp_to_group(entry):
@@ -11,8 +24,13 @@ def nntp_to_group(entry):
         count=max(0, int(entry[1]) - int(entry[2]))
     )
 
-app = flask.Flask(__name__)
-
+def mask_email(line):
+    for match in EMAIL_RE.finditer(line):
+        user_start = match.start('user')
+        user_end = match.end('user')
+        user_length = user_end - user_start
+        line = line[:user_start] + u'.' * user_length + line[user_end:]
+    return line
 
 def get_encoding(s, num):
     return [entry[1].split(";")[1][9:] for entry in
@@ -42,13 +60,19 @@ def get_group(group):
 def get_message(group, num):
     s = nntplib.NNTP('news.epita.fr')
     s.group(group)
+
+    # Decode lines from their original charset to Unicode.
     encoding = get_encoding(s, num)
     if len(encoding) != 1:
         encoding = 'utf-8'
     else:
         encoding = encoding[0]
-    #message = [properly_decode_header(line) for line in s.body(num)[3]]
-    message = [line.decode(encoding, 'replace') for line in s.body(num)[3]]
+    # And mask email addresses in the same time.
+    lines = [
+        mask_email(line.decode(encoding, 'replace'))
+        for line in s.body(num)[3]
+    ]
+
     return flask.render_template('message.html', message=message)
 
 
