@@ -1,7 +1,11 @@
 body
 {
-    background-image: url(derpy.jpg);
-    background-size: cover;
+    background-color: #222222;
+    background-image: url(muffinreader.png);
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: contain;
 }
 #groupsdiv
 {
@@ -26,12 +30,35 @@ body
 #message
 {
     overflow:auto;
-    border:solid;
+    border:solid black;
     position:absolute;
     top:30%;
     left:15%;
     width:84%;
     height:69%;
+    color: #a0a0a0;
+    font-family: monospace;
+}
+
+#message .header_name
+{
+    color: rgba(64, 200, 0, 0.75);
+    font-weight: bold;
+}
+
+#message .quote
+{
+    color: rgba(192, 64, 64, 0.75);
+}
+
+#message .quote_quote
+{
+    color: rgba(192, 128, 64, 0.75);
+}
+
+#message .signature
+{
+    color: rgba(64, 200, 0, 0.75);
 }
 
 ul
@@ -45,21 +72,32 @@ ul
 
 li
 {
-    border: 1px solid;
+    border: 1px solid black;
     background-color: rgba(50, 50, 50, 0.5);
     display: block;
     opacity: 0.5;
+    color: #c0c0c0;
 }
 
 li :hover
 {
-    background-color: rgba(0, 0, 255, 0.5);
+    background-color: rgba(0, 128, 255, 0.5);
 }
 
 li a
 {
-    color: black;
+    color: #c0c0c0;
     text-decoration: none;
     display: block;
     width: 100%;
+}
+
+li a span.name
+{
+    font-weight: bold;
+}
+
+li a span.count
+{
+    color: #a0a0a0;
 }

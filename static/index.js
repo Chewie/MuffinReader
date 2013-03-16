@@ -1,6 +1,6 @@
 $(function(){
     $("#groupslist > li").click(function(event){
-        var group = $(this).text();
+        var group = this.firstChild.getAttribute("href").slice(1);
         $("#subjectslist").html("");
         event.preventDefault();
         $.ajax({
