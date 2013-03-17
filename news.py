@@ -14,8 +14,8 @@ app = flask.Flask(__name__)
 
 EMAIL_RE = re.compile(
     u'(?P<prefix>\s|<)'
-    u'(?P<user>[a-zA-Z.-_]+)'
-    u'(?P<domain>@[a-zA-Z.-_]+)'
+    u'(?P<user>[-a-zA-Z._]+)'
+    u'(?P<domain>@[-a-zA-Z._]+)'
     u'(?P<suffix>\s|>)'
 )
 
