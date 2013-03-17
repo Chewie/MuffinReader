@@ -14,8 +14,8 @@ app = flask.Flask(__name__)
 
 EMAIL_RE = re.compile(
     u'(?P<prefix>\s|<)'
-    u'(?P<user>[a-zA-Z.-_]+)'
-    u'(?P<domain>@[a-zA-Z.-_]+)'
+    u'(?P<user>[-a-zA-Z._]+)'
+    u'(?P<domain>@[-a-zA-Z._]+)'
     u'(?P<suffix>\s|>)'
 )
 
@@ -24,7 +24,7 @@ Group = collections.namedtuple('Group', 'name count')
 def nntp_to_group(entry):
     return Group(
         name=entry[0],
-        count=max(0, int(entry[1]) - int(entry[2]))
+        count=max(0, int(entry[1]) - int(entry[2]) + 1)
     )
 
 Header = collections.namedtuple('Header', 'name content')
@@ -138,6 +138,9 @@ def get_message(group, num):
             starts = new_state
         message.append(Line(line, starts))
         state = new_state
+    # Close any remaining tag.
+    if state != None:
+        message[-1].ends = state
 
     return flask.render_template(
         'message.html',
