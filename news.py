@@ -24,7 +24,7 @@ Group = collections.namedtuple('Group', 'name count')
 def nntp_to_group(entry):
     return Group(
         name=entry[0],
-        count=max(0, int(entry[1]) - int(entry[2]))
+        count=max(0, int(entry[1]) - int(entry[2]) + 1)
     )
 
 Header = collections.namedtuple('Header', 'name content')
