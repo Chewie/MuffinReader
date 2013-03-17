@@ -138,6 +138,9 @@ def get_message(group, num):
             starts = new_state
         message.append(Line(line, starts))
         state = new_state
+    # Close any remaining tag.
+    if state != None:
+        message[-1].ends = state
 
     return flask.render_template(
         'message.html',
