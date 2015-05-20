@@ -60,8 +60,8 @@ class Line(object):
         self.ends = ends
 
 def get_encoding(s, num):
-    return [entry[1].split(";")[1][9:] for entry in
-            s.xhdr('Content-Type', num)[1]]
+    return [entry.split(";")[1][9:] for entry in
+            filter(lambda x : 'Content-Type:' in x, s.head(num)[3])]
 
 
 @app.route('/')
@@ -76,9 +76,8 @@ def index():
 def get_group(group):
     s = nntplib.NNTP("news.epita.fr")
     _, _, first, last, _ = s.group(group)
-    subjects = s.xhdr("subject", first + "-" + last)[1]
-    subjects = [(num, properly_decode_header(title)) for
-            (num, title) in subjects]
+    subjects = [(x[0], properly_decode_header(x[1])) for
+            x in s.xover(first, last)[1]]
     subjects.reverse()
     return flask.render_template('subjects.html', subjects=subjects)
 
